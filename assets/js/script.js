@@ -3,13 +3,21 @@ const searchFormEl = document.getElementById('search-form');
 const cityNameEl = document.getElementById('city-name');
 const currentWeatherEl = document.getElementById('current-weather');
 const fiveDayEl = document.getElementById('five-day');
-//TODO: create global array to save city from the input textbox.
-// you have get from localstorage first if it exists otherwise default it to []
-//example:  const cityArr=  JSON.parse(localStorage.getItem("cities")) || []
+const cityArr = JSON.parse(localStorage.getItem("cities")) || [];
+const cityListEl = document.getElementById('city-list');
 
-function searchCity(event) {
-    event.preventDefault();
-    const cityName = cityNameEl.value;
+function renderCityList() {  
+    cityListEl.innerHTML = '';
+
+    cityArr.forEach(city => {
+        const cityItem = document.createElement('button');
+        cityItem.textContent = city;
+        cityItem.setAttribute('class', 'btn btn-secondary w-100 my-2')
+        cityListEl.appendChild(cityItem);
+    });
+}
+
+function searchCity(cityName) {
     populateCurrentWeather(cityName);
     populate5Day(cityName);
 }
@@ -22,8 +30,11 @@ function populateCurrentWeather(cityName) {
             return response.json();
         })
         .then(function (data) {
-            //TODO: push  data.name (city name) into an array and save that array into localstorage using JSON.stringfy
-            //reference week 4 - activity 26
+            if (!cityArr.includes(data.name)) {
+                cityArr.push(data.name);
+                localStorage.setItem("cities", JSON.stringify(cityArr));
+                renderCityList();
+            }
             currentWeatherEl.innerHTML = `
             <h3>${data.name} (${dayjs.unix(data.dt).format('MM/DD/YYYY')})<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt=""></h3>
             <h5>Temp: <span>${data.main.temp} °F</span></h5>
@@ -64,8 +75,21 @@ function populate5Day(cityName) {
         });
 }
 
-searchFormEl.addEventListener('submit', searchCity);
+searchFormEl.addEventListener('submit', function(event){
+    event.preventDefault();
+    const cityName = cityNameEl.value;
+    searchCity(cityName);
+    cityNameEl.value = '';
+});
 
-//TODO: get latest city from localstorage to replace default value ex chicago 
+cityListEl.addEventListener('click', function(event){
+    console.log(cityListEl)
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderCityList();
+});
+
+const lastCity = cityArr.length > 0 ? cityArr[cityArr.length - 1] : 'miami';
 populateCurrentWeather('miami');
 populate5Day('miami');
