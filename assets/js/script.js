@@ -23,6 +23,14 @@ function searchCity(cityName) {
 }
 
 function populateCurrentWeather(cityName) {
+
+    cityName = cityName.trim();
+
+    if (!cityName) {
+        alert('Please enter a valid city name.');
+        return;
+    }
+    
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=imperial`;
 
     fetch(url)
@@ -37,9 +45,9 @@ function populateCurrentWeather(cityName) {
             }
             currentWeatherEl.innerHTML = `
             <h3>${data.name} (${dayjs.unix(data.dt).format('MM/DD/YYYY')})<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt=""></h3>
-            <h5>Temp: <span>${data.main.temp} °F</span></h5>
-            <h5>Wind: <span>${data.wind.speed} MPH</span></h5>
-            <h5>Humidity: <span>${data.main.humidity} %</span></h5>`;
+            <h6 class="mb-4">Temp: <span>${data.main.temp} °F</span></h6>
+            <h6 class="mb-4">Wind: <span>${data.wind.speed} MPH</span></h6>
+            <h6 class="mb-4">Humidity: <span>${data.main.humidity} %</span></h6>`;
             console.log(data);
         });
 }
@@ -65,9 +73,9 @@ function populate5Day(cityName) {
                         <div class="card-body">
                             <h5 class="card-title">${dayjs.unix(forecast.dt).format('MM/DD/YYYY')}</h5>
                             <img src="https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="">
-                            <h5>Temp: <span>${forecast.main.temp} °F</span></h5>
-                            <h5>Wind: <span>${forecast.wind.speed} MPH</span></h5>
-                            <h5>Humidity: <span>${forecast.main.humidity} %</span></h5>
+                            <h5 class="mb-4">Temp: <span>${forecast.main.temp} °F</span></h5>
+                            <h5 class="mb-4">Wind: <span>${forecast.wind.speed} MPH</span></h5>
+                            <h5 class="mb-4">Humidity: <span>${forecast.main.humidity} %</span></h5>
                         </div>
                     </div>
                 </div>`;
@@ -83,7 +91,10 @@ searchFormEl.addEventListener('submit', function(event){
 });
 
 cityListEl.addEventListener('click', function(event){
-    console.log(cityListEl)
+    if (event.target.tagName === 'BUTTON') {
+        const cityName = event.target.textContent;
+        searchCity(cityName);
+    }
 })
 
 document.addEventListener('DOMContentLoaded', () => {
