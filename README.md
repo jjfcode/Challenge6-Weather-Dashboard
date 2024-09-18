@@ -26,6 +26,8 @@ A simple weather dashboard application that displays current weather and a 5-day
 
 ![alt text](./assets/images/Screenshot%201.png)
 
+ --- 
+
 **Repo:**
 
 [Github Repo](https://github.com/jjfcode/Challenge6-Weather-Dashboard)
