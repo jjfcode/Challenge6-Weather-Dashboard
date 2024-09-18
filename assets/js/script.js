@@ -102,5 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const lastCity = cityArr.length > 0 ? cityArr[cityArr.length - 1] : 'miami';
-populateCurrentWeather('miami');
-populate5Day('miami');
+
+populateCurrentWeather(lastCity);
+populate5Day(lastCity);
