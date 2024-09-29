@@ -35,6 +35,9 @@ function populateCurrentWeather(cityName) {
 
     fetch(url)
         .then(function (response) {
+            if (!response.ok) {
+                throw new Error(`City not found: ${response.status}`);
+            }
             return response.json();
         })
         .then(function (data) {
@@ -49,6 +52,10 @@ function populateCurrentWeather(cityName) {
             <h6 class="mb-4">Wind: <span>${data.wind.speed} MPH</span></h6>
             <h6 class="mb-4">Humidity: <span>${data.main.humidity} %</span></h6>`;
             console.log(data);
+        })
+        .catch (function (erro) {
+            alert(error.message);
+            currentWeatherEl.innerHTML = '';
         });
 }
 
@@ -57,6 +64,9 @@ function populate5Day(cityName) {
 
     fetch(url)
         .then(function (response) {
+            if (!response.ok) {
+                throw new Error(`City not found: ${response.status}`);
+            }
             return response.json();
         })
         .then(function (data) {
@@ -80,6 +90,10 @@ function populate5Day(cityName) {
                     </div>
                 </div>`;
             }
+        })
+        .catch(function (error) {
+            alert(error.message);
+            fiveDayEl.textContent = '';
         });
 }
 
@@ -95,7 +109,7 @@ cityListEl.addEventListener('click', function(event){
         const cityName = event.target.textContent;
         searchCity(cityName);
     }
-})
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     renderCityList();
